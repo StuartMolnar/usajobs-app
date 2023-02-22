@@ -8,7 +8,111 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    Hello
+
+    <main class="grid grid-cols-12 gap-4 mt-6">
+        
+        <div class="col-span-1"></div> 
+
+        <form action="" method="post" class=" col-span-10 text-black-accent fw-400">
+            <!-- <div class="flex">
+                <div class="flex flex-col mx-6">
+                    <label for="start_date" class="mx-4 my-4 w-full">Start Position Open Date (required)</label>
+                    <input type="text" id="start_date" name="start_date" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. 09-30-2015" required>
+                </div>
+                <div class="flex flex-col mx-6">
+                    <label for="end_date" class="mx-4 my-4 w-full">End Position Open Date</label>
+                    <input type="text" id="end_date" name="end_date" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" default today">
+                </div>
+                <div class="flex flex-col mx-6">
+                    <label for="position_series" class="mx-4 my-4 w-full">Position Series</label>
+                    <input type="text" id="position_series" name="position_series" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. 2210">
+                </div>
+                <div class="flex flex-col mx-6">
+                    <label for="pay_scale" class="mx-4 my-4 w-full">Pay Scale</label>
+                    <input type="text" id="pay_scale" name="pay_scale" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. YA">
+                </div>
+                <div class="flex flex-col mx-6">
+                    <label for="position_title" class="mx-4 my-4 w-full">Position Title</label>
+                    <input type="text" id="position_title" name="position_title" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. BUDGET ANALYST">
+                </div>
+                <div class="flex flex-col mx-6">
+                    <label for="work_schedule" class="mx-4 my-4 w-full">Work Schedule</label>
+                    <input type="text" id="work_schedule" name="work_schedule" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. Full-time">
+                </div>
+                <div class="flex flex-col mx-6">
+                    <label for="security_clearance_required" class="mx-4 my-4 w-full">Security Clearance Required</label>
+                    <input type="text" id="security_clearance_required" name="security_clearance_required" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. N">
+                </div>
+            </div> -->
+            <div class="flex-col">
+                <div class="flex">
+                    <label for="start_date" class="mx-4 my-4 w-full">Start Position Open Date (required)</label>
+                    <label for="end_date" class="mx-4 my-4 w-full">End Position Open Date</label>
+                    <label for="position_series" class="mx-4 my-4 w-full">Position Series</label>
+                    <label for="pay_scale" class="mx-4 my-4 w-full">Pay Scale</label>
+                    <label for="position_title" class="mx-4 my-4 w-full">Position Title</label>
+                    <label for="work_schedule" class="mx-4 my-4 w-full">Work Schedule</label>
+                    <label for="security_clearance" class="mx-4 my-4 w-full">Security Clearance</label>
+                </div>
+                <div class="flex">
+                    <input type="text" id="start_date" name="start_date" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. 09-30-2015" required>
+                    <input type="text" id="end_date" name="end_date" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" default today">
+                    <input type="text" id="position_series" name="position_series" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. 2210">
+                    <input type="text" id="pay_scale" name="pay_scale" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. YA">
+                    <input type="text" id="position_title" name="position_title" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. BUDGET ANALYST">
+                    <input type="text" id="work_schedule" name="work_schedule" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. Full-time">
+                    <input type="text" id="security_clearance" name="security_clearance" class="w-full mx-4 my-4 w-full border border-black border-solid" placeholder=" ex. N">
+
+                </div>
+            </div>
+
+        </form>
+
+
+
+        <div class="col-span-1"></div> 
+
+    </main>
+    <!--
+    <section class="grid grid-cols-12 gap-4 mt-6 "></section>
+    <div class="hidden col-span-1 sm:block"></div> 
+      <div class="col-span-4">
+        <form action="" method="post" class="text-black-accent fw-400">
+          <div class="flex flex-col space-x-6">
+            <div class="">
+              <label for="first_name" class="">First Name*</label>
+              <input type="text" id="first_name" name="first_name" class="w-full" placeholder="" required>
+            </div>             
+            <div class="">
+              <label for="last_name" class="">Last Name</label>
+              <input type="text" id="last_name" name="last_name" class="w-full" placeholder="">
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <label for="email" class="">Email*</label>
+            <input type="email" id="email" name="email" class="w-full" placerholder="">
+          </div>
+
+          <div class="mt-4">
+            <label for="message" class="">Message</label>
+            <textarea id="message" rows="4" class="w-full" placeholder=""></textarea>
+          </div>
+          
+
+            
+
+          <button class="mt-4 text-center button-primary fs-button">Send Message</button>
+
+        </form>
+      </div>
+
+      <div class="hidden col-span-1 sm:block"></div>     
+    </section>
+    -->
+
+
+
 </body>
 
 <script src="script.js"></script>
