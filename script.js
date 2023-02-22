@@ -12,5 +12,3 @@ fetch(url)
     console.log('data:', body.data[0])
    }
 );
-
-//fix: edit the endpoint logic in the cors-proxy server to return the content in json already
