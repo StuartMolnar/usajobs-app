@@ -670,8 +670,12 @@ video {
   margin-bottom: 0.5rem;
 }
 
+.m-4 {
+  margin: 1rem; /* 16px */
+}
+
 .m-5 {
-    margin: 1.25rem; /* 20px */
+  margin: 1.25rem; /* 20px */
 }
 
 .block {
@@ -794,6 +798,10 @@ video {
     justify-content: space-between;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
@@ -844,6 +852,11 @@ video {
 
 .p-2 {
   padding: 0.5rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .py-12 {
@@ -923,6 +936,10 @@ video {
   text-align: start;
 }
 
+.text-end {
+  text-align: end;
+}
+
 .text-4xl {
   font-size: 2.25rem;
   line-height: 2.5rem;
@@ -940,4 +957,53 @@ video {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.alert {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  margin: 10px;
+  padding: 10px;
+}
+
+.flex > label {
+  flex-basis: 20%;
+}
+
+.flex > button {
+  flex-basis: 20%;
+}
+
+.flex > input {
+  max-width: 500px;
+}
+
+.flex > .button-padder {
+  width: 80%;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  max-width: 150px;
+}
+
+button:hover {
+  background-color: #1c6ea4;
+}
+
+.divider-line {
+  height: 1px;
+  background: #ADADAD;
+  width: 100%;
 }
