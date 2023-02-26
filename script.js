@@ -112,10 +112,10 @@ submitButton.addEventListener('click', async function() {
      validation promise only logs when there is sufficient wait time for it to complete 
   */
   let validationPromise = await validateParams();
-  console.log(validationPromise);
+  //console.log(validationPromise);
 
   let queryPromise = await buildQuery();
-  console.log(queryPromise);
+  //console.log(queryPromise);
 
   Promise.all([validationPromise, queryPromise]).then((values) => {
     console.log('validation:', values[0]);
