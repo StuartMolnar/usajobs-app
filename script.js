@@ -97,13 +97,13 @@ const fetchResults = (query) => {
   fetch(QUERY_STRUCTURE + query)
     .then(response => {
       return(response.json());
-    })/*.then(body => {
+    }).then(body => {
 
       console.log('type:', typeof(body));
       console.log('body:', body);
       console.log('data:', body.data[0])
     }
-  );*/
+  );
 }
 
 
@@ -119,7 +119,7 @@ submitButton.addEventListener('click', () => {
   validateInputs(StartPositionOpenDate, EndPositionOpenDate, PositionSeries)
     .then(() => {
       document.getElementById('alert-messages').classList.add('hidden');
-      console.log(fetchResults(buildQuery()));
+      fetchResults(buildQuery());
     })
     .catch((error) => {
       document.getElementById('alert-messages').classList.remove('hidden');
