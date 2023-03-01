@@ -1,45 +1,40 @@
 const QUERY_STRUCTURE = 'https://usajobs-api-proxy.westus3.cloudapp.azure.com:8443/proxy/historicjoa?';
 
-let StartPositionOpenDate = '';
-let EndPositionOpenDate = '';
+let StartPositionCloseDate = '';
+let EndPositionCloseDate = '';
 let PositionSeries = '';
-/*
-document.getElementById('submit-button').addEventListener('click', (event) => {
-  event.preventDefault();
 
-  StartPositionOpenDate = document.getElementById('start_date').value;
-  EndPositionOpenDate = document.getElementById('end_date').value;
-  PositionSeries = document.getElementById('position_series').value;
+// Define a variable to store the original HTML of the results div
+let originalHTML = '';
 
-  console.log(StartPositionOpenDate, EndPositionOpenDate, PositionSeries);
-});
-*/
-
-
-// Piece 1: Validate inputs code
+// Define a function to validate user inputs
 const validateInputs = (start_date, end_date, position_series) => {
   return new Promise((resolve, reject) => {
-    // ... Your validation logic goes here
     let isValid = true;
     let alertMessages = '';
 
+    // Check if start_date is in the correct format of mm-dd-yyyy using a regular expression
     if (!/^\d{2}-\d{2}-\d{4}$/.test(start_date)) {
       alertMessages += ('Please enter a valid start date in the format mm-dd-yyyy\n');
       isValid = false;
-    }
+    };
 
+    // Check if end_date is in the correct format of mm-dd-yyyy using a regular expression
+    // but only if it's not an empty string
     if (end_date !== '' && !/^\d{2}-\d{2}-\d{4}$/.test(end_date)) {
       alertMessages += ('Please enter a valid end date in the format mm-dd-yyyy\n');
       isValid = false;
-    }
+    };
 
+    // Check if position_series is a number with 1-4 digits using a regular expression
+    // but only if it's not an empty string
     if (position_series !== '' && !/^\d{1,4}$/.test(position_series)) {
       alertMessages += ('Please enter a number with 1-4 digits for position series\n');
       isValid = false;
-    }
+    };
 
-    if (EndPositionOpenDate === '') {
-
+    // If end_date is empty, set it to the current date minus 1 day
+    if (end_date === '') {
       // Get the current date and time in the Eastern time zone
       let estDate = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
 
@@ -53,24 +48,22 @@ const validateInputs = (start_date, end_date, position_series) => {
       let formattedDate = `${estDate.getMonth() + 1}-${estDate.getDate()}-${estDate.getFullYear()}`;
 
       // Set the value of end_date to the formatted date string
-      EndPositionOpenDate = formattedDate;
-    }
+      EndPositionCloseDate = formattedDate;
+    };
 
-
+    // Resolve the promise if all inputs are valid
     if (isValid){
       resolve();
     } else {
+      // Reject the promise with an error message if any input is invalid
       reject(alertMessages);
-    }
-    // If validation is successful, resolve the promise
-    // If validation fails, reject the promise with an error message
-    // reject("Validation failed");
+    };
   });
 };
 
-// Piece 2: Build query code
+// Define a function to build the API query string
 const buildQuery = () => {
-  let variables = { StartPositionOpenDate, EndPositionOpenDate, PositionSeries};
+  let variables = { PositionSeries, StartPositionCloseDate, EndPositionCloseDate};
 
   // Initialize a string variable to store the query string
   let queryString = '';
@@ -88,163 +81,231 @@ const buildQuery = () => {
   queryString = queryString.substring(1);
 
   return queryString;
-  // ... Your query building logic goes here
 };
 
-const fetchResults = (query) => {
-  console.log('accessing api...');
+// Define a function to create a job post element
+const buildJobPosting = (job) => {
+  // create the main container element
+  const mainContainer = document.createElement('div');
+  mainContainer.className = 'flex job-posting background-selector'; // add the 'job-posting' class
 
-  fetch(QUERY_STRUCTURE + query)
-    .then(response => {
-      return(response.json());
-    }).then(body => {
 
-      console.log('type:', typeof(body));
-      console.log('body:', body);
-      console.log('data:', body.data[0])
+  // create the left container element
+  const leftContainer = document.createElement('div');
+  leftContainer.className = 'flex-row flex-basis-50';
+
+  // create the first inner element for the left container
+  const innerElement1 = document.createElement('div');
+  innerElement1.className = 'mx-4 my-4 w-full job-title';
+  innerElement1.innerHTML = '<b>' + job.positionTitle + '</b>';
+
+  // create the second inner element for the left container
+  const innerElement2 = document.createElement('div');
+  innerElement2.className = 'mx-4 my-4 w-full job-department';
+  innerElement2.textContent = job.hiringDepartmentName;
+
+  // create the third inner element for the left container
+  const innerElement3 = document.createElement('div');
+  innerElement3.className = 'mx-4 my-4 w-full job-agency';
+  innerElement3.textContent = job.hiringAgencyName;
+
+  // append the inner elements to the left container
+  leftContainer.appendChild(innerElement1);
+  leftContainer.appendChild(innerElement2);
+  leftContainer.appendChild(innerElement3);
+
+  // create the right container element
+  const rightContainer = document.createElement('div');
+  rightContainer.className = 'flex-row flex-basis-50';
+
+  // create the first inner element for the right container
+  const innerElement4 = document.createElement('div');
+  innerElement4.className = 'mx-4 my-4 w-full job-pay-scale';
+  innerElement4.textContent = 'Pay Scale: ' + job.payScale;
+
+  // create the second inner element for the right container
+  const innerElement5 = document.createElement('div');
+  innerElement5.className = 'mx-4 my-4 w-full job-open-date';
+  innerElement5.textContent = 'Opened: ' + job.positionOpenDate.substring(0, 10);
+
+  // create the third inner element for the right container
+  const innerElement6 = document.createElement('div');
+  innerElement6.className = 'mx-4 my-4 w-full job-close-date';
+  innerElement6.textContent = 'Closed: ' + job.positionCloseDate.substring(0, 10);
+
+
+  // append the inner elements to the right container
+  rightContainer.appendChild(innerElement4);
+  rightContainer.appendChild(innerElement5);
+  rightContainer.appendChild(innerElement6);
+
+  // append the left and right containers to the main container
+  mainContainer.appendChild(leftContainer);
+  mainContainer.appendChild(rightContainer);
+
+  // append the main container to the document body
+  return mainContainer;
+
+};
+
+// Define a function to write the job postings to the page
+const buildJobListings = (jobs) => {
+
+  // Get the results container element
+  const resultsContainer = document.getElementById('results');
+
+  // Create a counter for the visible job postings
+  let visibleCounter = 0;
+
+  // iterate over the jobs array
+  for (let job of jobs) {
+    const jobPosting = buildJobPosting(job);
+
+    // If the job posting is visible, increment the visible counter
+    if (jobPosting.style.display !== 'none') {
+      visibleCounter++;
     }
-  );
-}
+
+    // Add the gray-background class to every 2nd visible job posting
+    if (visibleCounter % 2 === 0) {
+      jobPosting.classList.add('bg-gray');
+    } else {
+      jobPosting.classList.remove('bg-gray');
+    }
+
+    // Append the job posting element to the results container
+    resultsContainer.appendChild(jobPosting);
 
 
+  }
+
+  // Store the original HTML of the results container
+  originalHTML = resultsContainer.innerHTML;
+
+};
+
+// Define a function to fetch job search results from the API
+const fetchResults = async (query) => {
+
+  // Find the spinner element in the DOM and display it
+  const spinner = document.getElementById('spinner');
+  spinner.style.display = 'block';
+
+  let PageSize = 25;
+  let PageNumber = 1;
+  let TotalPages = null;
+  document.getElementById('page-number').textContent = '(' + PageNumber + ' of ?)';
+
+  while (true) {
+    // Log a message to indicate that the API is being accessed and log the API query being executed
+    console.log('accessing api...');
+    console.log(QUERY_STRUCTURE + query + '&PageNumber=' + PageNumber + '&PageSize=' + PageSize);
+
+    // Use the fetch() function to execute the API query and wait for the response to be returned
+    const response = await fetch(QUERY_STRUCTURE + query);
+
+    // Convert the response to JSON and wait for the data to be returned
+    const body = await response.json();
+
+
+    // Update the TotalPages variable with the total number of pages returned by the API
+    TotalPages = body.paging.metadata.totalPages;
+    document.getElementById('page-number').textContent = '(' + PageNumber + ' of ' + TotalPages + ')';
+
+    console.log('total pages: ' + body.paging.metadata.totalPages);
+
+    // Pass the job listings data to the buildJobListings function
+    buildJobListings(body.data);
+
+    if (PageNumber == TotalPages) {
+      break;
+    }
+    // Increment the page number for the next iteration of the while loop
+    PageNumber++;
+  }
+
+  // Hide the spinner element when the API request is complete
+  spinner.style.display = 'none';
+
+};
+
+// Get a reference to the submit button and add a click event listener to it
 const submitButton = document.getElementById('submit-button');
-submitButton.addEventListener('click', () => {
-  event.preventDefault();
+submitButton.addEventListener('click', (event) => {
+  event.preventDefault(); // prevent the form from being submitted
 
-  StartPositionOpenDate = document.getElementById('start_date').value;
-  EndPositionOpenDate = document.getElementById('end_date').value;
+  // Clear the results container
+  document.getElementById('results').innerHTML = '';
+
+  // Get values from the date and position series input fields
+  StartPositionCloseDate = document.getElementById('start_date').value;
+  EndPositionCloseDate = document.getElementById('end_date').value;
   PositionSeries = document.getElementById('position_series').value;
 
-  // Call Piece 1 first and wait for it to complete before calling Piece 2
-  validateInputs(StartPositionOpenDate, EndPositionOpenDate, PositionSeries)
+  // Call the validateInputs function first and wait for it to complete before calling the fetchResults function
+  validateInputs(StartPositionCloseDate, EndPositionCloseDate, PositionSeries)
     .then(() => {
-      document.getElementById('alert-messages').classList.add('hidden');
-      fetchResults(buildQuery());
-    })
-    .catch((error) => {
+    // Hide alert messages and call the fetchResults function to retrieve data from the API
+    document.getElementById('alert-messages').classList.add('hidden');
+    fetchResults(buildQuery());
+    }).catch((error) => {
+      // Show alert messages if there is an error with the input fields
       document.getElementById('alert-messages').classList.remove('hidden');
       document.getElementById('alert-messages').innerText = error;
     });
-
 });
 
+// Define a function to filter job postings based on the search input
+const filterResults = (query) => {
+  // Get the current value of the search bar and convert to lowercase
+  const searchValue = document.getElementById('search-input').value.toLowerCase();
 
-/* -----------------working-------------------
-// Generate the API query string on form submit
-let submitButton = document.getElementById('submit-button');
-submitButton.addEventListener('click', async function() {
-  event.preventDefault();
+  // If the search bar is empty, restore the original HTML
+  if (searchValue === '') {
+    document.getElementById('results').innerHTML = originalHTML;
+    return;
+  }
 
-  // Get the values of the input elements
-  StartPositionOpenDate = document.getElementById('start_date').value;
-  EndPositionOpenDate = document.getElementById('end_date').value;
-  PositionSeries = document.getElementById('position_series').value;
-  position_title = document.getElementById('position_title').value;
-  hiring_department_code = document.getElementById('hiring_department_code').value;
-  hiring_agency_code = document.getElementById('hiring_agency_code').value;
+  // Create a counter for the visible job postings
+  let visibleCounter = 0;
 
-  // Create a Promise that resolves after the input validation is complete
-  let inputPromise = new Promise((resolve, reject) => {
-    let isValid = true;
-    let alertMessages = '';
-    // Validate start_date input is in format 'mm-dd-yyyy'
-    if (!/^\d{2}-\d{2}-\d{4}$/.test(StartPositionOpenDate)) {
-      console.log('start date validated')
-      alertMessages += ('Please enter a valid start date in the format mm-dd-yyyy\n');
-      isValid = false;
-    }
+  // Get all the job postings and filter based on the search value
+  const jobPostings = document.querySelectorAll('.job-posting');
+  jobPostings.forEach((jobPosting) => {
+    // Get the text content of each job posting element and convert to lowercase
+    const jobTitle = jobPosting.querySelector('.job-title').textContent.toLowerCase();
+    const jobDepartment = jobPosting.querySelector('.job-department').textContent.toLowerCase();
+    const jobAgency = jobPosting.querySelector('.job-agency').textContent.toLowerCase();
+    const jobPayScale = jobPosting.querySelector('.job-pay-scale').textContent.toLowerCase();
+    const jobOpenDate = jobPosting.querySelector('.job-open-date').textContent.toLowerCase();
+    const jobCloseDate = jobPosting.querySelector('.job-close-date').textContent.toLowerCase();
 
-    // Validate end_date input is in format 'mm-dd-yyyy' or is an empty string
-    if (EndPositionOpenDate !== '' && !/^\d{2}-\d{2}-\d{4}$/.test(EndPositionOpenDate)) {
-      alertMessages += ('Please enter a valid end date in the format mm-dd-yyyy\n');
-      isValid = false;
-    }
-
-    // Validate PositionSeries input is a number containing 1-4 digits or is an empty string
-    if (!PositionSeries == ''){
-      if (!/^\d{1,4}$/.test(PositionSeries)) {
-        console.log('position series validated');
-        alertMessages += ('Please enter a number for position series\n');
-        isValid = false;
+    if (jobTitle.includes(searchValue) || jobDepartment.includes(searchValue) || jobAgency.includes(searchValue) || jobPayScale.includes(searchValue) || jobOpenDate.includes(searchValue) || jobCloseDate.includes(searchValue)) {
+      // Display the job posting if it matches the search value
+      jobPosting.style.display = 'flex';
+      // Add the gray-background class to every 2nd visible job posting
+      if (visibleCounter % 2 === 1) {
+        jobPosting.classList.add('bg-gray');
+      } else {
+        jobPosting.classList.remove('bg-gray');
       }
-    }
-
-    
-    // Use default date of yesterday if none is provided
-    if (EndPositionOpenDate === '') {
-
-      // Get the current date and time in the Eastern time zone
-      let estDate = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
-
-      // Convert the date and time string to a Date object
-      estDate = new Date(estDate);
-
-      // Subtract 1 day from the date
-      estDate.setDate(estDate.getDate() - 1);
-
-      // Format the date as a string in the "mm-dd-yyyy" format using template literals
-      let formattedDate = `${estDate.getMonth() + 1}-${estDate.getDate()}-${estDate.getFullYear()}`;
-
-      // Set the value of end_date to the formatted date string
-      EndPositionOpenDate = formattedDate;
-    }
-
-    if (!isValid) {
-      document.getElementById('alert-messages').classList.remove('hidden');
-      document.getElementById('alert-messages').innerText = alertMessages;
-      reject(alertMessages);
+      visibleCounter++;
     } else {
-      document.getElementById('alert-messages').classList.add('hidden');      
-      resolve();
+      // Hide the job posting if it does not match the search value
+      jobPosting.style.display = 'none';
+      jobPosting.classList.remove('bg-gray');
     }
   });
 
-  inputPromise.then(() => {
+  
+};
 
-    // Create an object to store the variable names and values
-    let variables = { StartPositionOpenDate, EndPositionOpenDate, PositionSeries};
-
-    // Initialize a string variable to store the query string
-    let queryString = '';
-
-    // Use a for...in loop to iterate over the object properties
-    for (let variableName in variables) {
-      // Check if the value of the variable is not empty
-      if (variables[variableName].trim() !== '') {
-        // If the value is not empty, add the variable name and value to the query string
-        queryString += `&${variableName}=${variables[variableName]}`;
-      }
-    }
-
-    //remove the first '&' from the query string
-    queryString = queryString.substring(1);
-
-    console.log(queryString);
-
-  })
-
-});
-
-*/
+// Add event listener for input event on search input element
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('input', filterResults); // Call the filterResults function when the input value changes
 
 
-
-/*
-let url = 'https://usajobs-api-proxy.westus3.cloudapp.azure.com:8443/proxy/historicjoa?PageSize=1&PageNumber=2&PositionSeries=2210&StartPositionOpenDate=10-01-2015&EndPositionOpenDate=09-30-2016';
-
-
-
-console.log('accessing api...');
-
-fetch(url)
-  .then(response => {
-    return response.json()
-   }).then(body => {
-
-    console.log('type:', typeof(body));
-    console.log('body:', body);
-    console.log('data:', body.data[0])
-   }
-);
-
-*/
+// todo: add multipage querying
+// todo: add filtering by bottom 3 input boxes
+// todo: gunicorn may already solve this? make proxy server asynchronous and non-blocking
+// todo: use docker-compose and nginx to run a load balancer for the server

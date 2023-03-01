@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Job History Search</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -67,50 +67,36 @@
 
         <div class="mx-0 my-8 divider-line"></div>
 
+        <div class="grid grid-cols-12">
+          <div class="col-span-1"></div>
 
-         
+          <div class="col-span-10 search-container">
+            <label for="search-input">Search: </label>
+            <input type="text" id="search-input">
+          </div>
 
+          <div class="col-span-1"></div>
+        </div>
+
+        <div class="grid grid-cols-12 mt-6">
+          <div class="col-span-5"></div>
+          <div class="col-span-1"><p id="page-number"></p></div>
+          <div id="spinner" class="col-span-1"></div>
+          <div class="col-span-5"></div>
+        </div>
         
 
+
+        <div class="grid grid-cols-12 gap-4 mt-6">
+          <div class="col-span-1"></div>
+          <div class="col-span-10">
+            <div id="results" class="results flex-col">
+              
+          </div>
+          <div class="col-span-1"></div>
+        </div>
+
     </main>
-    <!--
-    <section class="grid grid-cols-12 gap-4 mt-6 "></section>
-    <div class="hidden col-span-1 sm:block"></div> 
-      <div class="col-span-4">
-        <form action="" method="post" class="text-black-accent fw-400">
-          <div class="flex flex-col space-x-6">
-            <div class="">
-              <label for="first_name" class="">First Name*</label>
-              <input type="text" id="first_name" name="first_name" class="w-full" placeholder="" required>
-            </div>             
-            <div class="">
-              <label for="last_name" class="">Last Name</label>
-              <input type="text" id="last_name" name="last_name" class="w-full" placeholder="">
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <label for="email" class="">Email*</label>
-            <input type="email" id="email" name="email" class="w-full" placerholder="">
-          </div>
-
-          <div class="mt-4">
-            <label for="message" class="">Message</label>
-            <textarea id="message" rows="4" class="w-full" placeholder=""></textarea>
-          </div>
-          
-
-            
-
-          <button class="mt-4 text-center button-primary fs-button">Send Message</button>
-
-        </form>
-      </div>
-
-      <div class="hidden col-span-1 sm:block"></div>     
-    </section>
-    -->
-
 
 
 </body>
