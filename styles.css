@@ -1025,8 +1025,8 @@ button:hover {
   border: 6px solid #f3f3f3;
   border-top: 6px solid #3498db;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   animation: spin 1s linear infinite;
   display: none;
 }
@@ -1053,6 +1053,10 @@ button:hover {
   border-radius: 4px;
   font-size: 1rem;
   flex-grow: 1;
+}
+
+.hidden {
+  display: none;
 }
 
 /*

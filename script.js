@@ -3,12 +3,15 @@ const QUERY_STRUCTURE = 'https://usajobs-api-proxy.westus3.cloudapp.azure.com:84
 let StartPositionCloseDate = '';
 let EndPositionCloseDate = '';
 let PositionSeries = '';
+let PositionTitle = '';
+let HiringDepartmentCode = '';
+let HiringAgencyCode = '';
 
 // Define a variable to store the original HTML of the results div
 let originalHTML = '';
 
 // Define a function to validate user inputs
-const validateInputs = (start_date, end_date, position_series) => {
+const validateInputs = (start_date, end_date, position_series, hiring_department_code, hiring_agency_code) => {
   return new Promise((resolve, reject) => {
     let isValid = true;
     let alertMessages = '';
@@ -30,6 +33,20 @@ const validateInputs = (start_date, end_date, position_series) => {
     // but only if it's not an empty string
     if (position_series !== '' && !/^\d{1,4}$/.test(position_series)) {
       alertMessages += ('Please enter a number with 1-4 digits for position series\n');
+      isValid = false;
+    };
+
+    // Check if hiring_department_code is a 2 digit number using a regular expression
+    // but only if it's not an empty string
+    if (hiring_department_code !== '' && !/^\d{2}$/.test(hiring_department_code)) {
+      alertMessages += ('Please enter a 2-digit number for hiring department code\n');
+      isValid = false;
+    };
+
+    // Check if hiring_agency_code is a string exactly 4 characters long
+    // but only if it's not an empty string
+    if (hiring_agency_code !== '' && hiring_agency_code.length !== 4) {
+      alertMessages += ('Please enter a string of exactly 4 characters for hiring agency code\n');
       isValid = false;
     };
 
@@ -151,6 +168,9 @@ const buildJobPosting = (job) => {
 // Define a function to write the job postings to the page
 const buildJobListings = (jobs) => {
 
+  console.log('function: buildJobListings');
+  console.log('jobs: ', jobs);
+
   // Get the results container element
   const resultsContainer = document.getElementById('results');
 
@@ -184,6 +204,25 @@ const buildJobListings = (jobs) => {
 
 };
 
+const filterResultsByInput = (jobs) => {
+  console.log('function filterResultsByInput(jobs)');
+  console.log('data jobs: ', jobs);
+  filteredJobs = [];
+
+  // iterate over the jobs array
+  for (let job of jobs) {
+    if (job.hiringAgencyCode.toLowerCase().includes(HiringAgencyCode.toLowerCase()) || 
+        job.HiringDepartmentCode.toLowerCase().includes(HiringAgencyCode.toLowerCase())) {
+      return;
+    }
+
+    filterJobs.push(job);
+  }
+
+  return filteredJobs;
+
+}
+
 // Define a function to fetch job search results from the API
 const fetchResults = async (query) => {
 
@@ -191,39 +230,48 @@ const fetchResults = async (query) => {
   const spinner = document.getElementById('spinner');
   spinner.style.display = 'block';
 
-  let PageSize = 25;
+  let PageSize = 1000;
   let PageNumber = 1;
   let TotalPages = null;
   document.getElementById('page-number').textContent = '(' + PageNumber + ' of ?)';
-
-  while (true) {
-    // Log a message to indicate that the API is being accessed and log the API query being executed
-    console.log('accessing api...');
-    console.log(QUERY_STRUCTURE + query + '&PageNumber=' + PageNumber + '&PageSize=' + PageSize);
-
-    // Use the fetch() function to execute the API query and wait for the response to be returned
-    const response = await fetch(QUERY_STRUCTURE + query);
-
-    // Convert the response to JSON and wait for the data to be returned
-    const body = await response.json();
-
-
-    // Update the TotalPages variable with the total number of pages returned by the API
-    TotalPages = body.paging.metadata.totalPages;
-    document.getElementById('page-number').textContent = '(' + PageNumber + ' of ' + TotalPages + ')';
-
-    console.log('total pages: ' + body.paging.metadata.totalPages);
-
-    // Pass the job listings data to the buildJobListings function
-    buildJobListings(body.data);
-
-    if (PageNumber == TotalPages) {
-      break;
+  try {
+    while (true) {
+      // Log a message to indicate that the API is being accessed and log the API query being executed
+      console.log('accessing api...');
+      console.log(QUERY_STRUCTURE + query + '&PageNumber=' + PageNumber + '&PageSize=' + PageSize);
+  
+      // Use the fetch() function to execute the API query and wait for the response to be returned
+      const response = await fetch(QUERY_STRUCTURE + query);
+  
+      // Convert the response to JSON and wait for the data to be returned
+      const body = await response.json();
+  
+  
+      // Update the TotalPages variable with the total number of pages returned by the API
+      TotalPages = body.paging.metadata.totalPages;
+      document.getElementById('page-number').textContent = '(' + PageNumber + ' of ' + TotalPages + ')';
+  
+      console.log('total pages: ' + body.paging.metadata.totalPages);
+      
+      console.log('function fetchResults(query) {');
+      console.log('body data: ', body.data);
+      // Pass the job listings data to the buildJobListings function
+      buildJobListings(filterResultsByInput(body.data));
+  
+      if (PageNumber == TotalPages) {
+        break;
+      }
+      // Increment the page number for the next iteration of the while loop
+      PageNumber++;
     }
-    // Increment the page number for the next iteration of the while loop
-    PageNumber++;
+  } catch (error){
+    console.log('error: ', error);
+    document.getElementById('page-number').textContent = '';
+    document.getElementById('api-error-message').textContent = 'There was an error accessing the API.';
   }
 
+  
+  document.getElementById('search-container').classList.remove('hidden');
   // Hide the spinner element when the API request is complete
   spinner.style.display = 'none';
 
@@ -234,6 +282,11 @@ const submitButton = document.getElementById('submit-button');
 submitButton.addEventListener('click', (event) => {
   event.preventDefault(); // prevent the form from being submitted
 
+  console.log('submit button clicked');
+
+  document.getElementById('search-container').classList.add('hidden');
+  document.getElementById('api-error-message').textContent = '';
+
   // Clear the results container
   document.getElementById('results').innerHTML = '';
 
@@ -241,14 +294,19 @@ submitButton.addEventListener('click', (event) => {
   StartPositionCloseDate = document.getElementById('start_date').value;
   EndPositionCloseDate = document.getElementById('end_date').value;
   PositionSeries = document.getElementById('position_series').value;
+  PositionTitle = document.getElementById('position_title').value;
+  HiringDepartmentCode = document.getElementById('hiring_department_code').value;
+  HiringAgencyCode = document.getElementById('hiring_agency_code').value;
 
   // Call the validateInputs function first and wait for it to complete before calling the fetchResults function
-  validateInputs(StartPositionCloseDate, EndPositionCloseDate, PositionSeries)
+  validateInputs(StartPositionCloseDate, EndPositionCloseDate, PositionSeries, HiringDepartmentCode, HiringAgencyCode)
     .then(() => {
     // Hide alert messages and call the fetchResults function to retrieve data from the API
     document.getElementById('alert-messages').classList.add('hidden');
+    console.log('fetching results...')
     fetchResults(buildQuery());
     }).catch((error) => {
+      console.log('error caught: ' + error);
       // Show alert messages if there is an error with the input fields
       document.getElementById('alert-messages').classList.remove('hidden');
       document.getElementById('alert-messages').innerText = error;

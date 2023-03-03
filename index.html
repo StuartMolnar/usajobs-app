@@ -42,11 +42,11 @@
               <div class="flex">
                 
                 <label for="hiring_department_code" class="mx-4 my-4 w-full text-end">Hiring Department Code</label>
-                <input type="text" id="hiring_department_code" name="hiring_department_code" class="w-full px-2 mx-4 my-4 w-full border border-black border-solid" placeholder="ex. Full-time">
+                <input type="text" id="hiring_department_code" name="hiring_department_code" class="w-full px-2 mx-4 my-4 w-full border border-black border-solid" placeholder="20">
               </div>
               <div class="flex">
                 <label for="hiring_agency_code" class="mx-4 my-4 w-full text-end">Hiring Agency Code</label>
-                <input type="text" id="hiring_agency_code" name="hiring_agency_code" class="w-full px-2 mx-4 my-4 w-full border border-black border-solid" placeholder="ex. N">
+                <input type="text" id="hiring_agency_code" name="hiring_agency_code" class="w-full px-2 mx-4 my-4 w-full border border-black border-solid" placeholder="TR93">
 
               </div>
               <div class="flex">
@@ -67,7 +67,7 @@
 
         <div class="mx-0 my-8 divider-line"></div>
 
-        <div class="grid grid-cols-12">
+        <div id="search-container" class="grid grid-cols-12 hidden">
           <div class="col-span-1"></div>
 
           <div class="col-span-10 search-container">
@@ -84,14 +84,22 @@
           <div id="spinner" class="col-span-1"></div>
           <div class="col-span-5"></div>
         </div>
-        
+
+        <div class="grid grid-cols-12 gap-4 mt-6">
+          <div class="col-span-4"></div>
+          <div class="col-span-6">
+            <p id="api-error-message"></p>              
+          </div>
+          <div class="col-span-3"></div>
+        </div>       
 
 
         <div class="grid grid-cols-12 gap-4 mt-6">
           <div class="col-span-1"></div>
           <div class="col-span-10">
             <div id="results" class="results flex-col">
-              
+
+            </div>              
           </div>
           <div class="col-span-1"></div>
         </div>
