@@ -11,8 +11,6 @@
 
     <main>
         
-        
-
         <form action="" method="post" class="text-black-accent fw-400">
                         
           <div class="grid grid-cols-12 gap-4 mt-6">
@@ -20,7 +18,7 @@
 
             <div class="flex-col col-span-10">
               <div class="flex">
-                <label for="start_date" class="mx-4 my-4 w-full text-end"><b>(required)</b> Start Position Open Date</label>
+                <label for="start_date" class="mx-4 my-4 w-full text-end"><span style="color: red;">(required)</span> Start Position Open Date</label>
                 <input type="text" id="start_date" name="start_date" class="w-full px-2 mx-4 my-4 w-full border border-black border-solid" placeholder="ex. 09-30-2015" required>
 
               </div>
@@ -60,7 +58,6 @@
 
           <div class="col-span-1"></div>
         </div>
-          
 
         </form>
 
@@ -70,7 +67,7 @@
         <div id="search-container" class="grid grid-cols-12 hidden">
           <div class="col-span-1"></div>
 
-          <div class="col-span-10 search-container">
+          <div class="flexcol-span-10 search-container">
             <label for="search-input">Search: </label>
             <input type="text" id="search-input">
           </div>
@@ -78,10 +75,10 @@
           <div class="col-span-1"></div>
         </div>
 
-        <div class="grid grid-cols-12 mt-6">
+        <div id="spinner" class="grid hidden flex-row grid-cols-12 mt-6">
           <div class="col-span-5"></div>
           <div class="col-span-1"><p id="page-number"></p></div>
-          <div id="spinner" class="col-span-1"></div>
+          <div class="spinner col-span-1"></div>
           <div class="col-span-5"></div>
         </div>
 
@@ -93,13 +90,10 @@
           <div class="col-span-3"></div>
         </div>       
 
-
         <div class="grid grid-cols-12 gap-4 mt-6">
           <div class="col-span-1"></div>
           <div class="col-span-10">
-            <div id="results" class="results flex-col">
-
-            </div>              
+            <div id="results" class="results flex-col"></div>              
           </div>
           <div class="col-span-1"></div>
         </div>

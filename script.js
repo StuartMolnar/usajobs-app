@@ -168,9 +168,6 @@ const buildJobPosting = (job) => {
 // Define a function to write the job postings to the page
 const buildJobListings = (jobs) => {
 
-  console.log('function: buildJobListings');
-  console.log('jobs: ', jobs);
-
   // Get the results container element
   const resultsContainer = document.getElementById('results');
 
@@ -205,10 +202,8 @@ const buildJobListings = (jobs) => {
 };
 
 const filterResultsByInput = (jobs) => {
-  console.log('function filterResultsByInput(jobs)');
-  console.log('data jobs: ', jobs);
-  filteredJobs = [];
 
+  filteredJobs = [];
   
   for (let job of jobs) {
 
@@ -245,8 +240,9 @@ const fetchResults = async (query) => {
 
   // Find the spinner element in the DOM and display it
   const spinner = document.getElementById('spinner');
-  spinner.style.display = 'block';
+  spinner.classList.remove('hidden');
 
+  
   let PageSize = 1000;
   let PageNumber = 1;
   let TotalPages = null;
@@ -292,8 +288,7 @@ const fetchResults = async (query) => {
   
   document.getElementById('search-container').classList.remove('hidden');
   // Hide the spinner element when the API request is complete
-  spinner.style.display = 'none';
-
+  spinner.classList.add('hidden');
 };
 
 // Get a reference to the submit button and add a click event listener to it
