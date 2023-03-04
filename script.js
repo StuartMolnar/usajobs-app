@@ -266,11 +266,8 @@ const fetchResults = async (query) => {
   
       console.log('total pages: ' + body.paging.metadata.totalPages);
       
-      console.log('function fetchResults(query) {');
-      console.log('body data: ', body.data);
       // Pass the job listings data to the buildJobListings function
       filteredJobs = filterResultsByInput(body.data);
-      console.log('filteredJobs: ', filteredJobs);
       buildJobListings(filteredJobs);
   
       if (PageNumber == TotalPages) {
@@ -376,8 +373,4 @@ const filterResults = (query) => {
 const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', filterResults); // Call the filterResults function when the input value changes
 
-
-// todo: add multipage querying
-// todo: add filtering by bottom 3 input boxes
-// todo: gunicorn may already solve this? make proxy server asynchronous and non-blocking
 // todo: use docker-compose and nginx to run a load balancer for the server
