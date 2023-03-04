@@ -1,4 +1,4 @@
-const QUERY_STRUCTURE = 'https://usajobs-api-proxy.westus3.cloudapp.azure.com:8443/proxy/historicjoa?';
+const QUERY_STRUCTURE = 'https://usajobs-proxy.westus3.cloudapp.azure.com:8443/proxy/historicjoa?';
 
 let StartPositionCloseDate = '';
 let EndPositionCloseDate = '';
@@ -209,14 +209,31 @@ const filterResultsByInput = (jobs) => {
   console.log('data jobs: ', jobs);
   filteredJobs = [];
 
-  // iterate over the jobs array
+  
   for (let job of jobs) {
-    if (job.hiringAgencyCode.toLowerCase().includes(HiringAgencyCode.toLowerCase()) || 
-        job.HiringDepartmentCode.toLowerCase().includes(HiringAgencyCode.toLowerCase())) {
-      return;
+
+    // Check if the department code matches the input values
+    if (HiringDepartmentCode != ''){
+      if (job.hiringDepartmentCode == null || !job.hiringDepartmentCode.toLowerCase().includes(HiringDepartmentCode.toLowerCase())){
+        continue;
+      }
     }
 
-    filterJobs.push(job);
+    // Check if the agency code matches the input values
+    if (HiringAgencyCode != ''){
+      if (job.hiringAgencyCode == null || !job.hiringAgencyCode.toLowerCase().includes(HiringAgencyCode.toLowerCase())){
+        continue;
+      }
+    }
+
+    // Check if the position title matches the input values
+    if (PositionTitle != ''){
+      if (job.positionTitle == null || !job.positionTitle.toLowerCase().includes(PositionTitle.toLowerCase())){
+        continue;
+      }
+    }
+
+    filteredJobs.push(job);
   }
 
   return filteredJobs;
@@ -256,7 +273,9 @@ const fetchResults = async (query) => {
       console.log('function fetchResults(query) {');
       console.log('body data: ', body.data);
       // Pass the job listings data to the buildJobListings function
-      buildJobListings(filterResultsByInput(body.data));
+      filteredJobs = filterResultsByInput(body.data);
+      console.log('filteredJobs: ', filteredJobs);
+      buildJobListings(filteredJobs);
   
       if (PageNumber == TotalPages) {
         break;
@@ -267,7 +286,7 @@ const fetchResults = async (query) => {
   } catch (error){
     console.log('error: ', error);
     document.getElementById('page-number').textContent = '';
-    document.getElementById('api-error-message').textContent = 'There was an error accessing the API.';
+    document.getElementById('api-error-message').innerHTML = 'There was an error accessing the API. Please refresh and try again.<br>If the problem persists, please contact the administrator.';
   }
 
   
